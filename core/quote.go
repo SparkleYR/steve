@@ -117,9 +117,6 @@ func createQuoteImage(pfp image.Image, name, text string, timestamp time.Time) (
 
 	dc := gg.NewContext(int(finalWidth), int(totalHeight))
 
-	// todo: remove this
-	// dc.SetColor(color.RGBA{R: 255, G: 255, B: 255, A: 255}) // white background
-
 	dc.Clear()
 
 	dc.SetColor(darkBubbleColor)

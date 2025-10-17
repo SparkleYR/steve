@@ -32,12 +32,15 @@ func whois(client *whatsmeow.Client, ctx *context.Context) error {
 			_, _ = reply(client, ctx.Message, fmt.Sprintf("failed to get user: %s", err.Error()))
 			return ext.EndGroups
 		}
+		// Convert LID format to traditional phone number format for display
+		displayJID := jid.ToNonAD()
 		text := fmt.Sprintf(`*User Info*
 *ID*: %s
+*Phone*: %s
 *Server*: %s
 *About*: %s
 *Verified*: %s
-`, jid.String(), jid.Server, func() string {
+`, jid.String(), displayJID.User, jid.Server, func() string {
 			if users[jid].Status != "" {
 				return users[jid].Status
 			}
@@ -54,18 +57,22 @@ func whois(client *whatsmeow.Client, ctx *context.Context) error {
 	if ctx.Message.Message.Info.IsGroup {
 		return ext.EndGroups
 	}
-	jid := ctx.Message.Info.Chat
+	// Use Sender instead of Chat to get info about who sent the message
+	jid := ctx.Message.Info.Sender
 	users, err := client.GetUserInfo([]types.JID{jid})
 	if err != nil {
 		_, _ = reply(client, ctx.Message, fmt.Sprintf("failed to get user: %s", err.Error()))
 		return ext.EndGroups
 	}
+	// Convert LID format to traditional phone number format for display
+	displayJID := jid.ToNonAD()
 	text := fmt.Sprintf(`*User Info*
 *ID*: %s
+*Phone*: %s
 *Server*: %s
 *About*: %s
 *Verified*: %s
-`, jid.String(), jid.Server, func() string {
+`, jid.String(), displayJID.User, jid.Server, func() string {
 		if users[jid].Status != "" {
 			return users[jid].Status
 		}

@@ -22,8 +22,6 @@ type Context struct {
 func New(ctx context.Context, evt interface{}) *Context {
 	switch v := evt.(type) {
 	case *events.Message:
-		// buf, _ := json.MarshalIndent(v, "", " ") // For debugging purposes
-		// fmt.Println(string(buf))
 		sql.AddMessage(v.Info.ID, v.Info.PushName, v.Info.Sender.User, v.Info.Timestamp.Unix())
 		return &Context{
 			Message: &Message{
